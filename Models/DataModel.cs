@@ -9,7 +9,7 @@ namespace si_net_project_api
     public class DataModel
     {
         [BsonElement("Value")] 
-        public string Value { get; set; }
+        public double Value { get; set; }
         
         [BsonElement("Date")] 
         public DateTime DateTime { get; set; }

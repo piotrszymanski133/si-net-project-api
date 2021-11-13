@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MongoDB.Driver;
 
 namespace si_net_project_api.Services
@@ -53,6 +54,58 @@ namespace si_net_project_api.Services
         public List<DataModel> FindAllHumiditiesByHive(int hiveId)
         {
             return _humidityData.Find(humidity => humidity.HiveId == hiveId).ToList();
+        }
+
+        public List<DataModel> FindAllTemperaturesByDates(DateTime start, DateTime end)
+        {
+            return _temperatureData.Find(temperature => start <= temperature.DateTime && temperature.DateTime < end)
+                .ToList();
+        }
+
+        public List<DataModel> FindAllTemperaturesByHiveAndDates(int hive, DateTime start, DateTime end)
+        {
+            return _temperatureData.Find(
+                    temperature => temperature.HiveId == hive && start <= temperature.DateTime && temperature.DateTime < end)
+                .ToList();
+        }
+        
+        public List<DataModel> FindAllWindsByDates(DateTime start, DateTime end)
+        {
+            return _windData.Find(wind => start <= wind.DateTime && wind.DateTime < end)
+                .ToList();
+        }
+
+        public List<DataModel> FindAllWindsByHiveAndDates(int hive, DateTime start, DateTime end)
+        {
+            return _windData.Find(
+                    wind => wind.HiveId == hive && start <= wind.DateTime && wind.DateTime < end)
+                .ToList();
+        }
+        
+        public List<DataModel> FindAllPressuresByDates(DateTime start, DateTime end)
+        {
+            return _pressureData.Find(pressure => start <= pressure.DateTime && pressure.DateTime < end)
+                .ToList();
+        }
+
+        public List<DataModel> FindAllPressuresByHiveAndDates(int hive, DateTime start, DateTime end)
+        {
+            return _pressureData.Find(
+                    pressure => pressure.HiveId == hive && start <= pressure.DateTime && pressure.DateTime < end)
+                .ToList();
+        }
+        
+        public List<DataModel> FindAllHumiditiesByDates(DateTime start, DateTime end)
+        {
+            return _humidityData.Find(humidity => start <= humidity.DateTime && humidity.DateTime < end)
+                .ToList();
+        }
+
+        public List<DataModel> FindAllHumiditiesByHiveAndDates(int hive, DateTime start, DateTime end)
+        {
+            return _humidityData.Find(
+                    humidity => humidity.HiveId == hive && start <= humidity.DateTime && humidity.DateTime < end)
+                .ToList();
         }
     }
 }

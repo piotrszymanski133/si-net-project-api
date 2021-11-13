@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using si_net_project_api.Formatters;
 using si_net_project_api.Services;
 
 namespace si_net_project_api
@@ -32,6 +33,10 @@ namespace si_net_project_api
             services.AddSingleton<IDatabaseSettings>(provider =>
                 provider.GetRequiredService<IOptions<DatabaseSettings>>().Value);
             services.AddSingleton<DataService>();
+            services.AddMvc(options =>
+            {
+                options.OutputFormatters.Add(new CsvOutputFormatter());
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
