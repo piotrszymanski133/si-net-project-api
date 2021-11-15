@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using si_net_project_api.Services;
 
@@ -15,6 +14,61 @@ namespace si_net_project_api.Controllers
         public DataController(DataService dataService)
         {
             _dataService = dataService;
+        }
+        
+        [HttpGet]
+        [Route("all")]
+        public ActionResult<List<DataModel>> GetAllData(
+            [FromQuery(Name="sdate")] DateTime sDate,
+            [FromQuery(Name="edate")] DateTime eDate,
+            [FromQuery(Name="hive")] int hive = -1,
+            [FromQuery(Name="sensor")] string sensor = "")
+        {
+            if(sensor.Equals("temperatures"))
+            {
+                return RedirectToAction("GetTemperatures", new {@sDate = sDate, @eDate = eDate, @sorted=false, @asc=true, @hive=hive});
+            }
+            if(sensor.Equals("winds"))
+            {
+                return RedirectToAction("GetWinds", new {@sDate = sDate, @eDate = eDate, @sorted=false, @asc=true, @hive=hive});
+            }
+            if(sensor.Equals("humidities"))
+            {
+                return RedirectToAction("GetHumidities", new {@sDate = sDate, @eDate = eDate, @sorted=false, @asc=true, @hive=hive});
+            }
+            if(sensor.Equals("pressures"))
+            {
+                return RedirectToAction("GetPressures", new {@sDate = sDate, @eDate = eDate, @sorted=false, @asc=true, @hive=hive});
+            }
+            
+            List<DataModel> ret = new List<DataModel>();
+            
+            if (eDate == new DateTime())
+            {
+                eDate = DateTime.Now;
+            }
+            if (eDate <= sDate)
+            {
+                return BadRequest();
+            }
+
+            if (hive < 0)
+            {
+                ret.AddRange(_dataService.FindAllTemperaturesByDates(sDate, eDate));
+                ret.AddRange(_dataService.FindAllWindsByDates(sDate, eDate));
+                ret.AddRange(_dataService.FindAllHumiditiesByDates(sDate, eDate));
+                ret.AddRange(_dataService.FindAllPressuresByDates(sDate, eDate));
+            }
+            else
+            {
+                ret.AddRange(_dataService.FindAllTemperaturesByHiveAndDates(hive, sDate, eDate));
+                ret.AddRange(_dataService.FindAllWindsByHiveAndDates(hive, sDate, eDate));
+                ret.AddRange(_dataService.FindAllHumiditiesByHiveAndDates(hive, sDate, eDate));
+                ret.AddRange(_dataService.FindAllPressuresByHiveAndDates(hive, sDate, eDate));
+            }
+            ret.Sort((el1, el2) => el1.DateTime.CompareTo(el2.DateTime));
+
+            return ret;
         }
 
         [HttpGet]

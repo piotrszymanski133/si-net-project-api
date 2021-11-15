@@ -16,6 +16,9 @@ namespace si_net_project_api
         
         [BsonElement("Hive")] 
         public int HiveId { get; set; }
+        
+        [BsonElement("Type")] 
+        public string Type { get; set; }
 
         [BsonId] 
         [BsonRepresentation(BsonType.ObjectId)]
