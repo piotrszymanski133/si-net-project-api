@@ -12,6 +12,7 @@ namespace si_net_project_api
         public double Value { get; set; }
         
         [BsonElement("Date")] 
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime DateTime { get; set; }
         
         [BsonElement("Hive")] 
